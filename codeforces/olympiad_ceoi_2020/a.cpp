@@ -1,58 +1,55 @@
 #include <bits/stdc++.h>
 using namespace std;
-const unsigned int M = 1000000007;
-vector<pair<int, int>> sections;
+const int MOD = 1e9 + 7;
 
-map<pair<int, int>, unsigned long long> mem;
-
-unsigned long long rectCount2(int n, int m) {
-    auto it = mem.find({n, m});
-    if(it != mem.end()) return it->second;
-    unsigned long long count = ((m * n * (n + 1) * (m + 1)) / 4) % M;
-    mem[{n, m}] = count;
-    return count;
+int mul(int a, int b) {
+    return ((long long)a * b) % MOD;
 }
 
-unsigned long long rectCount(pair<int, int> rect) {
-    return rectCount2(rect.first, rect.second);
+int half(int n) {
+    return mul(n, (MOD + 1) / 2);
+}
+
+void add_acc(int& a, int b) {
+    a += b;
+    if(a >= MOD) a -= MOD;
+}
+
+int calc(int h) {
+    return half(mul(h, h + 1));
 }
 
 int main() {
     int N;
     cin >> N;
-    vector<int> heights(N);
+    vector<int> h(N), w(N);
     for(int i = 0; i < N; i++) {
-        cin >> heights[i];
+        cin >> h[i];
     }
     for(int i = 0; i < N; i++) {
-        int width;
-        cin >> width;
-        sections.push_back({heights[i], width});
+        cin >> w[i];
     }
 
-    unsigned long long ans = 0;
-    unsigned long long totalWidth = 0;
-    for(int i = 0; i < N; i++) {
-        totalWidth += sections[i].second;
+    int ans = 0;
+    for(int mid = 0; mid < N; mid++) {
+        int L = mid, R = mid;
+        int w_left = 0, w_right = 0;
+        while(L > 0 && h[L - 1] > h[mid]) {
+            --L;
+            add_acc(w_left, w[L]);
+        }
+        while(R < N - 1 && h[R + 1] >= h[mid]) {
+            ++R;
+            add_acc(w_right, w[R]);
+        }
+        int h_ways = calc(h[mid]);
+        int w_ways = calc(((long long)w_left + w[mid] + w_right) % MOD);
+        w_ways -= calc(w_left);
+        w_ways -= calc(w_right);
+        w_ways %= MOD;
+        w_ways += MOD;
+        w_ways %= MOD;
+        add_acc(ans, mul(h_ways, w_ways));
     }
-    // for(int i = 0; i < N; i++) {
-    //     ans += rectCount(sections[i]);
-    // }
-
-    // pair<int, int> shortestRect = sections[0];
-    // unsigned long long totalWidth = 0;
-    // for(int i = 0; i < N; i++) {
-    //     totalWidth += sections[i].second;
-    //     if(sections[i].first < shortestRect.first) {
-    //         shortestRect = sections[i];
-    //     }
-    // }
-    // unsigned long long subAns = rectCount2(shortestRect.first, totalWidth);
-
-    // for(int i = 0; i < N; i++) {
-    //     subAns -= rectCount2(shortestRect.first, sections[i].second);
-    // }
-    // ans += subAns;
-    ans = rectCount2(sections[0].first, totalWidth);
-    cout << ans % M;
+    cout << ans;
 }
