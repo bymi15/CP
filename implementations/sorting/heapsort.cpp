@@ -9,8 +9,8 @@ void swap(T arr[], int i, int j) {
     arr[j] = temp;
 }
 
-int leftChild(int n) { return 2 * n + 1; }
-int rightChild(int n) { return 2 * n + 2; }
+int leftChild(int n) { return (long long)2 * n + 1; }
+int rightChild(int n) { return (long long)2 * n + 2; }
 
 template <typename T>
 void maxHeapify(T arr[], int i, int N) {
@@ -66,11 +66,10 @@ int main() {
     logArr(arr2);
     cout << endl;
 
-    int arr3[10000];
-    for(int i = 0; i < 10000; i++) {
-        arr3[i] = rand() % 10000;
+    const int NUM = 1e4;
+    int arr3[NUM];
+    for(int i = 0; i < NUM; i++) {
+        arr3[i] = rand() % NUM;
     }
-    sort(arr3, 10000);
-    // logArr(arr3);
-    // cout << endl;
+    sort(arr3, NUM);
 }

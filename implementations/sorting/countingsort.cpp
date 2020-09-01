@@ -27,11 +27,10 @@ int main() {
     logArr(arr);
     cout << endl;
 
-    int arr2[10000];
-    for(int i = 0; i < 10000; i++) {
-        arr2[i] = rand() % 10000;
+    const int NUM = 1e4;
+    int arr2[NUM];
+    for(int i = 0; i < NUM; i++) {
+        arr2[i] = rand() % NUM;
     }
-    sort(arr2, 10000);
-    // logArr(arr2);
-    // cout << endl;
+    sort(arr2, NUM);
 }
