@@ -14,3 +14,9 @@ void logArr(const T arr[], size_t SIZE) {
     for(size_t i = 0; i < SIZE; ++i)
         cout << arr[i] << " ";
 }
+
+template <typename T>
+void logVec(const vector<T> arr) {
+    for(T t : arr)
+        cout << t << " ";
+}
